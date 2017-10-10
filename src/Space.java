@@ -1,5 +1,3 @@
-package testing;
-
 import javax.swing.JLabel;
 
 public class Space {

@@ -1,4 +1,3 @@
-package testing;
 
 public class Board {
 	private int numRows = 6;
