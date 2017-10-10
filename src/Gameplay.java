@@ -31,27 +31,27 @@ public class Gameplay extends JFrame {
 	}
 
 	public void addComponentsToPane( final Container pane ) {
-		experimentLayout.setHgap(10);
+		experimentLayout.setHgap(20);
 		JPanel insertButtonsPane = new JPanel();
-		insertButtonsPane.setLayout(new GridLayout(1, 6));
+		insertButtonsPane.setLayout(new GridLayout(1, numCols));
 		compsToExperiment.setLayout(experimentLayout);
 
-		for ( int r = 0; r < numRows; r++ ) {
-			for ( int c = 0; c < numCols; c++ ) {
-				JLabel temp = new JLabel(Integer.toString(r) + ", " + Integer.toString(c), JLabel.CENTER);
+		for ( int c = 0; c < numCols; c++ ) {
+			for ( int r = 0; r < numRows; r++ ) {
+				JLabel temp = new JLabel(Integer.toString(c) + ", " + Integer.toString(r), JLabel.CENTER);
 				temp.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 2, Color.black));
 				temp.setOpaque(true);
 				temp.setBackground(Color.white);
 				compsToExperiment.add(temp);
 				board.getSpaceAtLocation(r, c).setLabel(temp);
 			}
-			JButton button = new JButton(Integer.toString(r + 1));
-			int temp_r = r;
+			JButton button = new JButton(Integer.toString(c + 1));
+			int temp_c = c;
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed( ActionEvent e ) {
 					// TODO call insertPiece function
-					handleButtonPress(temp_r);
+					handleButtonPress(temp_c);
 				}
 			});
 			insertButtonsPane.add(button);
@@ -74,8 +74,10 @@ public class Gameplay extends JFrame {
 		
 		if(currentTurn++ % 2 == 1) { // player 1
 			toSet.getLabel().setText("Player 1");
+			toSet.getLabel().setBackground(player1Color);
 		} else { // Player 2
 			toSet.getLabel().setText("Player 2");
+			toSet.getLabel().setBackground(player2Color);
 		}
 	}
 

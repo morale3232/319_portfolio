@@ -12,7 +12,6 @@ public class Space {
 	public Space(int row, int col) {
 		this.coor_x = row;
 		this.coor_y = col;
-		
 	}
 	
 	public JLabel getLabel() {
