@@ -174,17 +174,10 @@ public class Gameplay extends JFrame {
 
 	}
 
-	/**
-	 * Create the GUI and show it. For thread safety, this method is invoked from
-	 * the event dispatch thread.
-	 */
 	private static void createAndShowGUI() {
-		// Create and set up the window.
-		Gameplay frame = new Gameplay("GridLayoutDemo");
+		Gameplay frame = new Gameplay("Connect Four");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// Set up the content pane.
 		frame.addComponentsToPane(frame.getContentPane());
-		// Display the window.
 
 		frame.setLocationRelativeTo(null);
 		frame.pack();
@@ -192,9 +185,6 @@ public class Gameplay extends JFrame {
 	}
 
 	public static void main( String[] args ) {
-
-		// Schedule a job for the event dispatch thread:
-		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				createAndShowGUI();
