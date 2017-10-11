@@ -24,6 +24,9 @@ public class Gameplay extends JFrame {
 	GridLayout experimentLayout = new GridLayout(numRows, numCols);
 	final JPanel compsToExperiment = new JPanel();
 	Board board = new Board();
+	Player p1 = new Player("Alex", "A", null);
+	Player p2 = new Player("Brad", "B", null);
+	
 
 	public Gameplay( String name ) {
 		super(name);
@@ -40,7 +43,7 @@ public class Gameplay extends JFrame {
 
 	private boolean checkHorizontal( int r, int c ) {
 		int count = 0;
-		char currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
+		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
 		for ( int i = Math.max(0, c - 3); i < Math.min(numCols, c + 3); i++ ) {
 			if ( board.getSpaceAtLocation(r, i).getTaken() ) { // if space is occupied
 				if ( board.getSpaceAtLocation(r, i).getOwner().getSymbol() == currSymbol ) {
@@ -59,7 +62,7 @@ public class Gameplay extends JFrame {
 
 	private boolean checkVertical( int r, int c ) {
 		int count = 0;
-		char currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
+		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
 		for ( int i = Math.max(0, r - 4); i < Math.min(numRows, r + 4); i++ ) {
 			if ( board.getSpaceAtLocation(i, c).getTaken() ) {
 				if ( board.getSpaceAtLocation(i, c).getOwner().getSymbol() == currSymbol ) {
@@ -78,7 +81,7 @@ public class Gameplay extends JFrame {
 
 	private boolean checkDiagDownRight( int r, int c ) {
 		int count = 0;
-		char currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
+		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
 
 		for ( int i = r - 3, j = c - 3; i < r + 4 && j < c + 4; i++, j++ ) {
 			if ( 0 <= i && i < numRows && 0 <= j && j < numCols ) {
@@ -100,7 +103,7 @@ public class Gameplay extends JFrame {
 
 	private boolean checkDiagUpRight( int r, int c ) {
 		int count = 0;
-		char currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
+		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
 
 		for ( int i = r + 3, j = c - 3; i > r - 4 && j < c + 4; i--, j++ ) {
 			if(0<= i && i<numRows && 0<=j && j<numCols) {
@@ -128,7 +131,7 @@ public class Gameplay extends JFrame {
 
 		for ( int r = 0; r < numRows; r++ ) {
 			for ( int c = 0; c < numCols; c++ ) {
-				JLabel temp = new JLabel(Integer.toString(c) + ", " + Integer.toString(r), JLabel.CENTER);
+				JLabel temp = new JLabel(" ", JLabel.CENTER);
 				temp.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 2, Color.black));
 				temp.setOpaque(true);
 				temp.setBackground(Color.white);
@@ -162,12 +165,14 @@ public class Gameplay extends JFrame {
 		Space toSet = board.getSpaceAtLocation(spaceToInsert, column);
 		toSet.setTaken(true);
 
-		if ( currentTurn % 2 == 1 ) { // player 1
-			toSet.setOwner(new Player("Alex", 't', null));
+		if ( currentTurn++ % 2 == 1 ) { // player 1
+			toSet.setOwner(p1);
+			toSet.getLabel().setText(p1.getSymbol());
 			toSet.getLabel().setBackground(player1Color);
 			checkForWin(spaceToInsert, column);
 		} else { // Player 2
-			toSet.setOwner(new Player("John", 'a', null));
+			toSet.setOwner(p2);
+			toSet.getLabel().setText(p2.getSymbol());
 			toSet.getLabel().setBackground(player2Color);
 			checkForWin(spaceToInsert, column);
 		}

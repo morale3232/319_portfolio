@@ -3,25 +3,25 @@ import java.net.Socket;
 public class Player {
 
 	private String name;
-	private char symbol;
+	private String symbol;
 	private Socket socket;
 	
 	public Player() {
 		this.name = "";
-		this.symbol = ' ';
+		this.symbol = " ";
 		this.socket = null;
 	}
 	
-	public Player(String name, char symbol, Socket socket) {
+	public Player(String name, String symbol, Socket socket) {
 		setName(name);
 		setSymbol(symbol);
 		setSocket(socket);
 	}
 	
-	public void setSymbol(char symbol) {
+	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
-	public char getSymbol() {
+	public String getSymbol() {
 		return this.symbol;
 	}
 	
