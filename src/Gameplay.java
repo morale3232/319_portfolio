@@ -26,7 +26,6 @@ public class Gameplay extends JFrame {
 	Board board = new Board();
 	Player p1 = new Player("Alex", "A", null);
 	Player p2 = new Player("Brad", "B", null);
-	
 
 	public Gameplay( String name ) {
 		super(name);
@@ -106,16 +105,16 @@ public class Gameplay extends JFrame {
 		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
 
 		for ( int i = r + 3, j = c - 3; i > r - 4 && j < c + 4; i--, j++ ) {
-			if(0<= i && i<numRows && 0<=j && j<numCols) {
-				if(board.getSpaceAtLocation(i, j).getTaken()) {
-					if(board.getSpaceAtLocation(i, j).getOwner().getSymbol() == currSymbol) {
+			if ( 0 <= i && i < numRows && 0 <= j && j < numCols ) {
+				if ( board.getSpaceAtLocation(i, j).getTaken() ) {
+					if ( board.getSpaceAtLocation(i, j).getOwner().getSymbol() == currSymbol ) {
 						count++;
 					} else {
 						count = 1;
 					}
 				}
 			}
-			if(count==4) {
+			if ( count == 4 ) {
 				System.out.println("WINNER DiagUp");
 				return true;
 			}

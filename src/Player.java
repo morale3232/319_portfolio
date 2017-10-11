@@ -5,26 +5,27 @@ public class Player {
 	private String name;
 	private String symbol;
 	private Socket socket;
-	
+
 	public Player() {
 		this.name = "";
 		this.symbol = " ";
 		this.socket = null;
 	}
-	
-	public Player(String name, String symbol, Socket socket) {
+
+	public Player( String name, String symbol, Socket socket ) {
 		setName(name);
 		setSymbol(symbol);
 		setSocket(socket);
 	}
-	
-	public void setSymbol(String symbol) {
+
+	public void setSymbol( String symbol ) {
 		this.symbol = symbol;
 	}
+
 	public String getSymbol() {
 		return this.symbol;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -41,5 +42,4 @@ public class Player {
 		this.socket = socket;
 	}
 
-	
 }

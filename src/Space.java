@@ -8,12 +8,11 @@ public class Space {
 	int coor_y = -1;
 	JLabel label;
 
-
-	public Space(int row, int col) {
+	public Space( int row, int col ) {
 		this.coor_x = row;
 		this.coor_y = col;
 	}
-	
+
 	public JLabel getLabel() {
 		return label;
 	}
