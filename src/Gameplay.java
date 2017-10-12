@@ -54,7 +54,7 @@ public class Gameplay extends JFrame {
 		}
 		if ( count >= 4 ) {
 			System.out.println("WINNER HORI");
-			// return true;
+			 return true;
 		}
 		return false;
 	}
@@ -73,7 +73,7 @@ public class Gameplay extends JFrame {
 		}
 		if ( count >= 4 ) {
 			System.out.println("WINNER VERT");
-			// return true;
+			 return true;
 		}
 		return false;
 	}
@@ -94,7 +94,7 @@ public class Gameplay extends JFrame {
 			}
 			if ( count == 4 ) {
 				System.out.println("Winner DiagDown");
-				// return true;
+				 return true;
 			}
 		}
 		return false;
