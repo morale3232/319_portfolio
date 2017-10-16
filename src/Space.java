@@ -2,8 +2,8 @@ import javax.swing.JLabel;
 
 public class Space {
 
-	Boolean taken = false; // delete
-	Player owner;
+	Boolean taken = false;
+	GamePlayer owner;
 	int coor_x = -1;
 	int coor_y = -1;
 	JLabel label;
@@ -29,27 +29,11 @@ public class Space {
 		this.taken = taken;
 	}
 
-	public Player getOwner() {
+	public GamePlayer getOwner() {
 		return owner;
 	}
 
-	public void setOwner( Player owner ) {
-		this.owner = owner;
-	}
-
-	public int getCoor_x() {
-		return coor_x;
-	}
-
-	public void setCoor_x( int coor_x ) {
-		this.coor_x = coor_x;
-	}
-
-	public int getCoor_y() {
-		return coor_y;
-	}
-
-	public void setCoor_y( int coor_y ) {
-		this.coor_y = coor_y;
+	public void setOwner( GamePlayer p1 ) {
+		this.owner = p1;
 	}
 }

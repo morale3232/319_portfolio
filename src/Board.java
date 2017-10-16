@@ -20,11 +20,21 @@ public class Board {
 			}
 		}
 
-		return -1; // row is full
+		return -1; // column is full
 	}
 
 	public Space getSpaceAtLocation( int r, int c ) {
 		return array[r][c];
+	}
+
+	public boolean isBoardFull() {
+		for ( int c = 0; c < numCols - 1; c++ ) {
+			int lowest = getLowestAvailableSpace(c);
+			if (lowest != -1){
+				return false;
+			}
+		}
+		return true;		
 	}
 
 }

@@ -1,198 +1,98 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-
-@SuppressWarnings( "serial" )
-public class Gameplay extends JFrame {
+public class Gameplay {
 	static final String gapList[] = { "0", "10", "15", "20" };
 	final static int maxGap = 20;
 	static final int numRows = 6;
 	static final int numCols = 7;
-	static int currentTurn = 0;
-	static final Color player1Color = Color.red;
-	static final Color player2Color = Color.blue;
-	GridLayout experimentLayout = new GridLayout(numRows, numCols);
-	final JPanel compsToExperiment = new JPanel();
-	Board board = new Board();
-	Player p1 = new Player("Alex", "A", null);
-	Player p2 = new Player("Brad", "B", null);
 
-	public Gameplay( String name ) {
-		super(name);
-		setResizable(true);
+	public Gameplay() {
+
 	}
 
-	private boolean checkForWin( int r, int c ) {
+	public static boolean checkForWin(GamePlayer gamePlayer, int r, int c) {
 
-		if ( checkHorizontal(r, c) || checkVertical(r, c) || checkDiagDownRight(r, c) || checkDiagUpRight(r, c) ) {
+		if (checkHorizontal(gamePlayer, r, c) || checkVertical(gamePlayer, r, c) || checkDiagDownRight(gamePlayer, r, c)
+				|| checkDiagUpRight(gamePlayer, r, c)) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean checkHorizontal( int r, int c ) {
+	private static boolean checkHorizontal(GamePlayer gamePlayer, int r, int c) {
 		int count = 0;
-		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
-		for ( int i = Math.max(0, c - 3); i < Math.min(numCols, c + 3); i++ ) {
-			if ( board.getSpaceAtLocation(r, i).getTaken() ) { // if space is occupied
-				if ( board.getSpaceAtLocation(r, i).getOwner().getSymbol() == currSymbol ) {
+		for (int i = Math.max(0, c - 3); i < Math.min(numCols, c + 3); i++) {
+			if (gamePlayer.board.getSpaceAtLocation(r, i).getTaken()) {
+				GamePlayer g = gamePlayer.board.getSpaceAtLocation(r, i).getOwner();
+				if (g == gamePlayer) {
 					count++;
 				} else {
-					count = 1;
+					count = 0;
 				}
 			}
 		}
-		if ( count >= 4 ) {
+		if (count >= 4) {
 			System.out.println("WINNER HORI");
-			 return true;
+			return true;
 		}
 		return false;
 	}
 
-	private boolean checkVertical( int r, int c ) {
+	private static boolean checkVertical(GamePlayer gamePlayer, int r, int c) {
 		int count = 0;
-		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
-		for ( int i = Math.max(0, r - 4); i < Math.min(numRows, r + 4); i++ ) {
-			if ( board.getSpaceAtLocation(i, c).getTaken() ) {
-				if ( board.getSpaceAtLocation(i, c).getOwner().getSymbol() == currSymbol ) {
+		for (int i = Math.max(0, r - 4); i < Math.min(numRows, r + 4); i++) {
+			if (gamePlayer.board.getSpaceAtLocation(i, c).getTaken()) {
+				GamePlayer g = gamePlayer.board.getSpaceAtLocation(i, c).getOwner();
+				if (g == gamePlayer) {
 					count++;
 				} else {
-					count = 1;
+					count = 0;
 				}
 			}
 		}
-		if ( count >= 4 ) {
+		if (count >= 4) {
 			System.out.println("WINNER VERT");
-			 return true;
+			return true;
 		}
 		return false;
 	}
 
-	private boolean checkDiagDownRight( int r, int c ) {
+	private static boolean checkDiagDownRight(GamePlayer gamePlayer, int r, int c) {
 		int count = 0;
-		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
-
-		for ( int i = r - 3, j = c - 3; i < r + 4 && j < c + 4; i++, j++ ) {
-			if ( 0 <= i && i < numRows && 0 <= j && j < numCols ) {
-				if ( board.getSpaceAtLocation(i, j).getTaken() ) {
-					if ( board.getSpaceAtLocation(i, j).getOwner().getSymbol() == currSymbol ) {
+		for (int i = r - 3, j = c - 3; i < r + 4 && j < c + 4; i++, j++) {
+			if (0 <= i && i < numRows && 0 <= j && j < numCols) {
+				if (gamePlayer.board.getSpaceAtLocation(i, j).getTaken()) {
+					if (gamePlayer.board.getSpaceAtLocation(i, j).getOwner() == gamePlayer) {
 						count++;
 					} else {
-						count = 1;
+						count = 0;
 					}
 				}
 			}
-			if ( count == 4 ) {
+			if (count == 4) {
 				System.out.println("Winner DiagDown");
-				 return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean checkDiagUpRight( int r, int c ) {
-		int count = 0;
-		String currSymbol = board.getSpaceAtLocation(r, c).getOwner().getSymbol();
-
-		for ( int i = r + 3, j = c - 3; i > r - 4 && j < c + 4; i--, j++ ) {
-			if ( 0 <= i && i < numRows && 0 <= j && j < numCols ) {
-				if ( board.getSpaceAtLocation(i, j).getTaken() ) {
-					if ( board.getSpaceAtLocation(i, j).getOwner().getSymbol() == currSymbol ) {
-						count++;
-					} else {
-						count = 1;
-					}
-				}
-			}
-			if ( count == 4 ) {
-				System.out.println("WINNER DiagUp");
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public void addComponentsToPane( final Container pane ) {
-		experimentLayout.setHgap(20);
-		JPanel insertButtonsPane = new JPanel();
-		insertButtonsPane.setLayout(new GridLayout(1, numCols));
-		compsToExperiment.setLayout(experimentLayout);
-
-		for ( int r = 0; r < numRows; r++ ) {
-			for ( int c = 0; c < numCols; c++ ) {
-				JLabel temp = new JLabel(" ", JLabel.CENTER);
-				temp.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 2, Color.black));
-				temp.setOpaque(true);
-				temp.setBackground(Color.white);
-				compsToExperiment.add(temp);
-				board.getSpaceAtLocation(r, c).setLabel(temp);
-			}
-			JButton button = new JButton(Integer.toString(r + 1));
-			int temp_c = r;
-			button.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed( ActionEvent e ) {
-					handleButtonPress(temp_c);
+	private static boolean checkDiagUpRight(GamePlayer gamePlayer, int r, int c) {
+		int count = 0;
+		for (int i = r + 3, j = c - 3; i > r - 4 && j < c + 4; i--, j++) {
+			if (0 <= i && i < numRows && 0 <= j && j < numCols) {
+				if (gamePlayer.board.getSpaceAtLocation(i, j).getTaken()) {
+					if (gamePlayer.board.getSpaceAtLocation(i, j).getOwner() == gamePlayer) {
+						count++;
+					} else {
+						count = 0;
+					}
 				}
-			});
-			insertButtonsPane.add(button);
-		}
-
-		pane.add(insertButtonsPane, BorderLayout.NORTH);
-		pane.add(new JSeparator(), BorderLayout.CENTER);
-		pane.add(compsToExperiment, BorderLayout.SOUTH);
-	}
-
-	private void handleButtonPress( int column ) {
-		int spaceToInsert = board.getLowestAvailableSpace(column);
-		if ( spaceToInsert == -1 ) {
-			// TODO error message
-			System.out.println("This column is full");
-			return;
-		}
-
-		Space toSet = board.getSpaceAtLocation(spaceToInsert, column);
-		toSet.setTaken(true);
-
-		if ( currentTurn++ % 2 == 1 ) { // player 1
-			toSet.setOwner(p1);
-			toSet.getLabel().setText(p1.getSymbol());
-			toSet.getLabel().setBackground(player1Color);
-			checkForWin(spaceToInsert, column);
-		} else { // Player 2
-			toSet.setOwner(p2);
-			toSet.getLabel().setText(p2.getSymbol());
-			toSet.getLabel().setBackground(player2Color);
-			checkForWin(spaceToInsert, column);
-		}
-
-	}
-
-	private static void createAndShowGUI() {
-		Gameplay frame = new Gameplay("Connect Four");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.addComponentsToPane(frame.getContentPane());
-
-		frame.setLocationRelativeTo(null);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	public static void main( String[] args ) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
 			}
-		});
+			if (count == 4) {
+				System.out.println("WINNER DiagUp");
+				return true;
+			}
+		}
+		return false;
 	}
 }
