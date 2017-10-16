@@ -18,11 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class GamePlayer extends JFrame {
 
-//	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	Socket socket;
 	BufferedReader in;
 	PrintWriter out;
@@ -38,7 +37,7 @@ public class GamePlayer extends JFrame {
 	boolean myTurn = true;
 	static boolean connected = false;
 
-	public static void main(String[] args) throws IOException {
+	public static void main( String[] args ) throws IOException {
 		GamePlayer player = new GamePlayer();
 		player.sl = new ServerListener(player);
 		new Thread(player.sl).start();
@@ -51,25 +50,25 @@ public class GamePlayer extends JFrame {
 			serverIP = clientIn.readLine();
 			System.out.println("You entered " + serverIP);
 			connect();
-			if (connected) {
+			if ( connected ) {
 				System.out.println("Connected");
 				createAndShowGUI();
 			} else {
 				System.out.println("Could not connect. Exiting program.");
 				System.exit(-1);
 			}
-		} catch (IOException e) {
+		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void connect() {
 		try {
 			socket = new Socket(serverIP, serverPort);
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			connected = true;
-		} catch (IOException e) {
+		} catch ( IOException e ) {
 			System.out.println("Could not connect. Exiting program.");
 			System.exit(-1);
 			e.printStackTrace();
@@ -84,14 +83,14 @@ public class GamePlayer extends JFrame {
 		setVisible(true);
 	}
 
-	private void addComponentsToPane(final Container pane) {		
-		experimentLayout.setHgap(20);		
+	private void addComponentsToPane( final Container pane ) {
+		experimentLayout.setHgap(20);
 		JPanel insertButtonsPane = new JPanel();
 		insertButtonsPane.setLayout(new GridLayout(1, numCols));
 		compsToExperiment.setLayout(experimentLayout);
 
-		for (int r = 0; r < numRows; r++) {
-			for (int col = 0; col < numCols - 1; col++) {
+		for ( int r = 0; r < numRows; r++ ) {
+			for ( int col = 0; col < numCols - 1; col++ ) {
 				JLabel temp = new JLabel(" ", JLabel.CENTER);
 				temp.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 2, Color.black));
 				temp.setOpaque(true);
@@ -103,7 +102,7 @@ public class GamePlayer extends JFrame {
 			int temp_c = r;
 			button.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed( ActionEvent e ) {
 					handleButtonPress(temp_c);
 				}
 			});
@@ -114,13 +113,13 @@ public class GamePlayer extends JFrame {
 		pane.add(compsToExperiment, BorderLayout.SOUTH);
 
 		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
+			public void windowClosing( WindowEvent e ) {
 				System.out.println("Window Closed");
 				try {
 					out.close();
 					in.close();
 					socket.close();
-				} catch (Exception ioe) {
+				} catch ( Exception ioe ) {
 					ioe.printStackTrace();
 				}
 			}
@@ -128,30 +127,31 @@ public class GamePlayer extends JFrame {
 
 	}
 
-	private void handleButtonPress(int column) {
-		if (myTurn) {
+	private void handleButtonPress( int column ) {
+		if ( myTurn ) {
 			int spaceToInsert = board.getLowestAvailableSpace(column);
-			if (spaceToInsert == -1) {
+			if ( spaceToInsert == -1 ) {
 				myTurn = true;
 				System.out.println("This column is full");
 				boolean gameOver = board.isBoardFull();
-				if (!gameOver) return;
-				else{
+				if ( !gameOver )
+					return;
+				else {
 					out.println("tie");
-					this.tie();
+					this.gameEnd("You tied!");
 					return;
 				}
 			}
 			Space toSet = board.getSpaceAtLocation(spaceToInsert, column);
 			setSpace(this, toSet);
 
-			if (Gameplay.checkForWin(this, spaceToInsert, column)) {
+			if ( Gameplay.checkForWin(this, spaceToInsert, column) ) {
 				out.println("move" + spaceToInsert + "," + column);
 				out.println("lose");
-				this.win();
-			} else if(board.isBoardFull()){
+				this.gameEnd("You win!");
+			} else if ( board.isBoardFull() ) {
 				out.println("tie");
-				this.tie();
+				this.gameEnd("You tied!");
 				return;
 			}
 			out.println("move" + spaceToInsert + "," + column);
@@ -159,10 +159,10 @@ public class GamePlayer extends JFrame {
 		}
 	}
 
-	public void setSpace(GamePlayer gamePlayer, Space toSet) {
+	public void setSpace( GamePlayer gamePlayer, Space toSet ) {
 		toSet.setTaken(true);
 		toSet.setOwner(gamePlayer);
-		if (gamePlayer == this) {
+		if ( gamePlayer == this ) {
 			toSet.getLabel().setText("O");
 			toSet.getLabel().setBackground(Color.red);
 		} else {
@@ -171,25 +171,33 @@ public class GamePlayer extends JFrame {
 		}
 	}
 
-	public void lose() {
-		JLabel lose = new JLabel("YOU LOST");
-		this.add(lose, BorderLayout.WEST);
-		this.pack();
-		this.setVisible(true);
-		this.setEnabled(false);
-	}
-	
-	public void win() {
-		JLabel win = new JLabel("YOU WON");
-		this.add(win, BorderLayout.WEST);
-		this.pack();
-		this.setVisible(true);
-		this.setEnabled(false);
-	}
-	
-	public void tie() {
-		JLabel win = new JLabel("YOU TIED. GAME OVER.");
-		this.add(win, BorderLayout.WEST);
+	// public void lose() {
+	// JLabel lose = new JLabel("YOU LOST");
+	// this.add(lose, BorderLayout.WEST);
+	// this.pack();
+	// this.setVisible(true);
+	// this.setEnabled(false);
+	// }
+	//
+	// public void win() {
+	// JLabel win = new JLabel("YOU WON");
+	// this.add(win, BorderLayout.WEST);
+	// this.pack();
+	// this.setVisible(true);
+	// this.setEnabled(false);
+	// }
+	//
+	// public void tie() {
+	// JLabel win = new JLabel("YOU TIED. GAME OVER.");
+	// this.add(win, BorderLayout.WEST);
+	// this.pack();
+	// this.setVisible(true);
+	// this.setEnabled(false);
+	// }
+
+	public void gameEnd( String message ) {
+		JLabel messageLabel = new JLabel(message);
+		this.add(messageLabel, BorderLayout.CENTER);
 		this.pack();
 		this.setVisible(true);
 		this.setEnabled(false);
@@ -201,52 +209,52 @@ class ServerListener extends Thread {
 	private BufferedReader in;
 	private GamePlayer player;
 
-	ServerListener(GamePlayer player) {
+	ServerListener( GamePlayer player ) {
 		this.player = player;
 		in = player.in;
 	}
 
 	public void run() {
-		while (true) {
+		while ( true ) {
 			try {
 				String receiveMsg = in.readLine();
 				handleMessage(receiveMsg);
-			} catch (IOException e) {
-				
+			} catch ( IOException e ) {
+
 				System.out.println("Stream has closed.");
-				try{
+				try {
 					player.out.close();
 					player.in.close();
 					player.socket.close();
-				} catch (IOException e1){
+				} catch ( IOException e1 ) {
 					e1.printStackTrace();
 				}
 				break;
-			} catch (NullPointerException e) {
+			} catch ( NullPointerException e ) {
 				continue;
 			}
 		}
 	}
 
-	public void handleMessage(String msg) {
-		if (msg == null) {
+	public void handleMessage( String msg ) {
+		if ( msg == null ) {
 			System.exit(-1);
 		}
-		if (msg.contains("msg")) { // for debugging
+		if ( msg.contains("msg") ) { // for debugging
 			String newMsg = msg.replace("msg", "");
 			System.out.println(newMsg);
-		} else if (msg.contains("move")) { //set move from other player
+		} else if ( msg.contains("move") ) { // set move from other player
 			String newMsg = msg.replace("move", "");
 			String[] move = newMsg.split(",");
 			Space toSet = player.board.getSpaceAtLocation(Integer.parseInt(move[0]), Integer.parseInt(move[1]));
 			player.setSpace(null, toSet);
 			player.myTurn = true;
-		} else if (msg.contains("lose")){ //you lost the game :(
+		} else if ( msg.contains("lose") ) { // you lost the game :(
 			System.out.println("YOU LOST");
-			player.lose();
-		}  else if (msg.contains("tie")){ //you tied
+			player.gameEnd("You lose!");
+		} else if ( msg.contains("tie") ) { // you tied
 			System.out.println("YOU TIED");
-			player.tie();
+			player.gameEnd("You tied");
 		}
 	}
 }

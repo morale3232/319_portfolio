@@ -30,11 +30,11 @@ public class Board {
 	public boolean isBoardFull() {
 		for ( int c = 0; c < numCols - 1; c++ ) {
 			int lowest = getLowestAvailableSpace(c);
-			if (lowest != -1){
+			if ( lowest != -1 ) {
 				return false;
 			}
 		}
-		return true;		
+		return true;
 	}
 
 }
